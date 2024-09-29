@@ -56,8 +56,13 @@ namespace pinocchio
         else
           data.oMi[i] = data.liMi[i];
 
+<<<<<<< HEAD
         Matrix6xLike & J_ = J.const_cast_derived();
         jmodel.jointCols(J_) = data.oMi[i].act(jdata.S());
+=======
+        Matrix6xLike & J_ = PINOCCHIO_EIGEN_CONST_CAST(Matrix6xLike, J);
+        jmodel.jointVelCols(J_) = data.oMi[i].act(jdata.S());
+>>>>>>> a55d3bf7 ([EtienneAr feedback] Split jointCols jointRows and jointBLock for full and reduced system)
       }
     };
 
@@ -113,7 +118,7 @@ namespace pinocchio
         typedef typename Model::JointIndex JointIndex;
 
         const JointIndex & i = jmodel.id();
-        jmodel.jointCols(data.J) = data.oMi[i].act(jdata.S());
+        jmodel.jointJacCols(data.J) = data.oMi[i].act(jdata.S());
       }
     };
   } // namespace impl
@@ -318,8 +323,13 @@ namespace pinocchio
         data.liMi[i] = model.jointPlacements[i] * jdata.M();
         data.iMf[parent] = data.liMi[i] * data.iMf[i];
 
+<<<<<<< HEAD
         Matrix6xLike & J_ = J.const_cast_derived();
         jmodel.jointCols(J_) = data.iMf[i].actInv(jdata.S());
+=======
+        Matrix6xLike & J_ = PINOCCHIO_EIGEN_CONST_CAST(Matrix6xLike, J);
+        jmodel.jointVelCols(J_) = data.iMf[i].actInv(jdata.S());
+>>>>>>> a55d3bf7 ([EtienneAr feedback] Split jointCols jointRows and jointBLock for full and reduced system)
       }
     };
 
@@ -410,7 +420,7 @@ namespace pinocchio
           oMi = data.liMi[i];
         }
 
-        jmodel.jointCols(data.J) = oMi.act(jdata.S());
+        jmodel.jointJacCols(data.J) = oMi.act(jdata.S());
 
         // Spatial velocity of joint i expressed in the global frame o
         data.ov[i] = oMi.act(vJ);
@@ -418,8 +428,8 @@ namespace pinocchio
         typedef
           typename SizeDepType<JointModel::NV>::template ColsReturn<typename Data::Matrix6x>::Type
             ColsBlock;
-        ColsBlock dJcols = jmodel.jointCols(data.dJ);
-        ColsBlock Jcols = jmodel.jointCols(data.J);
+        ColsBlock dJcols = jmodel.jointJacCols(data.dJ);
+        ColsBlock Jcols = jmodel.jointJacCols(data.J);
 
         motionSet::motionAction(data.ov[i], Jcols, dJcols);
       }
