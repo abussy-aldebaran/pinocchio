@@ -61,8 +61,12 @@ namespace pinocchio
         jmodel.jointCols(J_) = data.oMi[i].act(jdata.S());
 =======
         Matrix6xLike & J_ = PINOCCHIO_EIGEN_CONST_CAST(Matrix6xLike, J);
+<<<<<<< HEAD
         jmodel.jointVelCols(J_) = data.oMi[i].act(jdata.S());
 >>>>>>> a55d3bf7 ([EtienneAr feedback] Split jointCols jointRows and jointBLock for full and reduced system)
+=======
+        jmodel.jointJacCols(J_) = data.oMi[i].act(jdata.S());
+>>>>>>> 6b22ea5e ([EtienneAr feedback] Fix joint jacobians computation for mimic)
       }
     };
 
@@ -189,50 +193,73 @@ namespace pinocchio
       assert(model.check(data) && "data is not consistent with model.");
 
       PINOCCHIO_CHECK_ARGUMENT_SIZE(Jin.rows(), 6);
-      PINOCCHIO_CHECK_ARGUMENT_SIZE(Jin.cols(), model.nv);
+      PINOCCHIO_CHECK_ARGUMENT_SIZE(Jin.cols(), model.nj);
 
       PINOCCHIO_CHECK_ARGUMENT_SIZE(Jout.rows(), 6);
       PINOCCHIO_CHECK_ARGUMENT_SIZE(Jout.cols(), model.nv);
 
+<<<<<<< HEAD
       Matrix6xLikeOut & Jout_ = Jout.const_cast_derived();
+=======
+      Matrix6xLikeOut & Jout_ = PINOCCHIO_EIGEN_CONST_CAST(Matrix6xLikeOut, Jout);
+      Jout_.fill(0);
+>>>>>>> 6b22ea5e ([EtienneAr feedback] Fix joint jacobians computation for mimic)
 
+      typedef typename ModelTpl<Scalar, Options, JointCollectionTpl>::JointIndex JointIndex;
       typedef typename Matrix6xLikeIn::ConstColXpr ConstColXprIn;
       typedef const MotionRef<ConstColXprIn> MotionIn;
 
       typedef typename Matrix6xLikeOut::ColXpr ColXprOut;
       typedef MotionRef<ColXprOut> MotionOut;
 
-      const int colRef = nv(model.joints[joint_id]) + idx_v(model.joints[joint_id]) - 1;
       switch (rf)
       {
       case WORLD: {
-        for (Eigen::DenseIndex j = colRef; j >= 0; j = data.parents_fromRow[(size_t)j])
+        for (JointIndex j = joint_id; j > 0; j = model.parents[(size_t)j])
         {
-          MotionIn v_in(Jin.col(j));
-          MotionOut v_out(Jout_.col(j));
+          for (int i = nj(model.joints[j]) - 1; i >= 0; i--)
+          {
+            const Eigen::DenseIndex col_in = idx_j(model.joints[j]) + i;
+            const Eigen::DenseIndex col_out = idx_v(model.joints[j]) + i;
 
-          v_out = v_in;
+            MotionIn v_in(Jin.col(col_in));
+            MotionOut v_out(Jout_.col(col_out));
+
+            v_out += v_in;
+          }
         }
         break;
       }
       case LOCAL_WORLD_ALIGNED: {
-        for (Eigen::DenseIndex j = colRef; j >= 0; j = data.parents_fromRow[(size_t)j])
+        for (JointIndex j = joint_id; j > 0; j = model.parents[(size_t)j])
         {
-          MotionIn v_in(Jin.col(j));
-          MotionOut v_out(Jout_.col(j));
+          for (int i = nj(model.joints[j]) - 1; i >= 0; i--)
+          {
+            const Eigen::DenseIndex col_in = idx_j(model.joints[j]) + i;
+            const Eigen::DenseIndex col_out = idx_v(model.joints[j]) + i;
 
-          v_out = v_in;
-          v_out.linear() -= placement.translation().cross(v_in.angular());
+            MotionIn v_in(Jin.col(col_in));
+            MotionOut v_out(Jout_.col(col_out));
+
+            v_out += v_in;
+            v_out.linear() -= placement.translation().cross(v_in.angular());
+          }
         }
         break;
       }
       case LOCAL: {
-        for (Eigen::DenseIndex j = colRef; j >= 0; j = data.parents_fromRow[(size_t)j])
+        for (JointIndex j = joint_id; j > 0; j = model.parents[(size_t)j])
         {
-          MotionIn v_in(Jin.col(j));
-          MotionOut v_out(Jout_.col(j));
+          for (int i = nj(model.joints[j]) - 1; i >= 0; i--)
+          {
+            const Eigen::DenseIndex col_in = idx_j(model.joints[j]) + i;
+            const Eigen::DenseIndex col_out = idx_v(model.joints[j]) + i;
 
-          v_out = placement.actInv(v_in);
+            MotionIn v_in(Jin.col(col_in));
+            MotionOut v_out(Jout_.col(col_out));
+
+            v_out += placement.actInv(v_in);
+          }
         }
         break;
       }
@@ -328,8 +355,12 @@ namespace pinocchio
         jmodel.jointCols(J_) = data.iMf[i].actInv(jdata.S());
 =======
         Matrix6xLike & J_ = PINOCCHIO_EIGEN_CONST_CAST(Matrix6xLike, J);
+<<<<<<< HEAD
         jmodel.jointVelCols(J_) = data.iMf[i].actInv(jdata.S());
 >>>>>>> a55d3bf7 ([EtienneAr feedback] Split jointCols jointRows and jointBLock for full and reduced system)
+=======
+        jmodel.jointVelCols(J_) += data.iMf[i].actInv(jdata.S());
+>>>>>>> 6b22ea5e ([EtienneAr feedback] Fix joint jacobians computation for mimic)
       }
     };
 
@@ -354,14 +385,22 @@ namespace pinocchio
       typedef typename Model::JointIndex JointIndex;
 
       data.iMf[jointId].setIdentity();
+
+      Matrix6xLike & J_ = PINOCCHIO_EIGEN_CONST_CAST(Matrix6xLike, J);
+      J_.fill(0);
+
       typedef JointJacobianForwardStep<
         Scalar, Options, JointCollectionTpl, ConfigVectorType, Matrix6xLike>
         Pass;
       for (JointIndex i = jointId; i > 0; i = model.parents[i])
       {
         Pass::run(
+<<<<<<< HEAD
           model.joints[i], data.joints[i],
           typename Pass::ArgsType(model, data, q.derived(), J.const_cast_derived()));
+=======
+          model.joints[i], data.joints[i], typename Pass::ArgsType(model, data, q.derived(), J_));
+>>>>>>> 6b22ea5e ([EtienneAr feedback] Fix joint jacobians computation for mimic)
       }
     }
 
