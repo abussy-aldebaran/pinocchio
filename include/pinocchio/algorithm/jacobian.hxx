@@ -202,8 +202,12 @@ namespace pinocchio
       Matrix6xLikeOut & Jout_ = Jout.const_cast_derived();
 =======
       Matrix6xLikeOut & Jout_ = PINOCCHIO_EIGEN_CONST_CAST(Matrix6xLikeOut, Jout);
+<<<<<<< HEAD
       Jout_.fill(0);
 >>>>>>> 6b22ea5e ([EtienneAr feedback] Fix joint jacobians computation for mimic)
+=======
+      Jout_.setZero();
+>>>>>>> 4cc92137 (Make code compile with CppAd)
 
       typedef typename ModelTpl<Scalar, Options, JointCollectionTpl>::JointIndex JointIndex;
       typedef typename Matrix6xLikeIn::ConstColXpr ConstColXprIn;
@@ -387,7 +391,7 @@ namespace pinocchio
       data.iMf[jointId].setIdentity();
 
       Matrix6xLike & J_ = PINOCCHIO_EIGEN_CONST_CAST(Matrix6xLike, J);
-      J_.fill(0);
+      J_.setZero();
 
       typedef JointJacobianForwardStep<
         Scalar, Options, JointCollectionTpl, ConfigVectorType, Matrix6xLike>
@@ -395,12 +399,8 @@ namespace pinocchio
       for (JointIndex i = jointId; i > 0; i = model.parents[i])
       {
         Pass::run(
-<<<<<<< HEAD
           model.joints[i], data.joints[i],
           typename Pass::ArgsType(model, data, q.derived(), J.const_cast_derived()));
-=======
-          model.joints[i], data.joints[i], typename Pass::ArgsType(model, data, q.derived(), J_));
->>>>>>> 6b22ea5e ([EtienneAr feedback] Fix joint jacobians computation for mimic)
       }
     }
 
