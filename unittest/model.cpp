@@ -863,4 +863,57 @@ BOOST_AUTO_TEST_CASE(test_has_configuration_limit)
   BOOST_CHECK((model_cf_limits_tangent == expected_cf_limits_tangent_model));
 }
 
+BOOST_AUTO_TEST_CASE(test_buildReducedModel_without_joint_frames)
+{
+  typedef Model::JointCollection JC;
+  typedef Model::JointIndex JointIndex;
+  Model model;
+
+  JointIndex ffidx = model.addJoint(0, JC::JointModelFreeFlyer(), SE3::Identity(), "root_joint");
+  JointIndex idx = model.addJoint(ffidx, typename JC::JointModelRX(), SE3::Identity(), "joint1");
+  model.addJointFrame(idx);
+  idx = model.addJoint(idx, typename JC::JointModelRX(), SE3::Identity(), "joint2");
+  idx = model.addJoint(idx, typename JC::JointModelRX(), SE3::Identity(), "joint3");
+
+  const std::vector<JointIndex> joints_to_lock = {model.getJointId("joint3")};
+  Model reduced_model;
+  BOOST_CHECK_NO_THROW(buildReducedModel(model, joints_to_lock, neutral(model), reduced_model));
+}
+
+BOOST_AUTO_TEST_CASE(test_buildReducedModel_with_joint_frames)
+{
+  typedef Model::JointCollection JC;
+  typedef Model::JointIndex JointIndex;
+  Model model;
+
+  JointIndex ffidx = model.addJoint(0, JC::JointModelFreeFlyer(), SE3::Identity(), "root_joint");
+  model.addJointFrame(ffidx);
+  JointIndex idx = model.addJoint(ffidx, typename JC::JointModelRX(), SE3::Identity(), "joint1");
+  model.addJointFrame(idx);
+  idx = model.addJoint(idx, typename JC::JointModelRX(), SE3::Identity(), "joint2");
+  model.addJointFrame(idx);
+  idx = model.addJoint(idx, typename JC::JointModelRX(), SE3::Identity(), "joint3");
+  model.addJointFrame(idx);
+
+  const std::vector<JointIndex> joints_to_lock = {model.getJointId("joint3")};
+  Model reduced_model;
+  BOOST_CHECK_NO_THROW(buildReducedModel(model, joints_to_lock, neutral(model), reduced_model));
+}
+
+BOOST_AUTO_TEST_CASE(test_buildReducedModel_without_any_joint_frames)
+{
+  typedef Model::JointCollection JC;
+  typedef Model::JointIndex JointIndex;
+  Model model;
+
+  JointIndex ffidx = model.addJoint(0, JC::JointModelFreeFlyer(), SE3::Identity(), "root_joint");
+  JointIndex idx = model.addJoint(ffidx, typename JC::JointModelRX(), SE3::Identity(), "joint1");
+  idx = model.addJoint(idx, typename JC::JointModelRX(), SE3::Identity(), "joint2");
+  idx = model.addJoint(idx, typename JC::JointModelRX(), SE3::Identity(), "joint3");
+
+  const std::vector<JointIndex> joints_to_lock = {model.getJointId("joint3")};
+  Model reduced_model;
+  BOOST_CHECK_NO_THROW(buildReducedModel(model, joints_to_lock, neutral(model), reduced_model));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
