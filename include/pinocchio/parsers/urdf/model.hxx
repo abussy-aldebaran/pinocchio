@@ -166,10 +166,10 @@ namespace pinocchio
           Scalar _offset,
           Vector3 _axis,
           JointType _jointType)
-        : mimiced_name(_mimiced_name)
+        : axis(_axis)
+        , mimiced_name(_mimiced_name)
         , multiplier(_multiplier)
         , offset(_offset)
-        , axis(_axis)
         , jointType(_jointType)
         {
         }
