@@ -99,6 +99,10 @@ namespace pinocchio
     JointModel & jmodel = joints.back();
     jmodel.setIndexes(joint_id, nq, nv, nj);
 
+    JointModelMimic* mimic = boost::get<JointModelMimic>(&jmodel);
+    if (mimic)
+      mimic->setMimicIndexes(joint_id, nq, nv, nj);
+
     const int joint_nq = jmodel.nq();
     const int joint_idx_q = jmodel.idx_q();
     const int joint_nv = jmodel.nv();
