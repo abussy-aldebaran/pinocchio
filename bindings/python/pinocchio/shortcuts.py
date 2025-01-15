@@ -74,7 +74,7 @@ def _buildModelsFromUrdf(
     meshLoader=None,
     geometry_types=None,
     mimic=False,
-) -> Tuple[pin.Model, pin.GeometryModel, pin.GeometryModel]:
+) -> tuple[pin.Model, pin.GeometryModel, pin.GeometryModel]:
     if geometry_types is None:
         geometry_types = [pin.GeometryType.COLLISION, pin.GeometryType.VISUAL]
 
