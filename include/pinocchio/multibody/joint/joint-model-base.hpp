@@ -435,8 +435,7 @@ namespace pinocchio
     // Non-const access
     // TODO rename Jac/Vel into Full/Red (for full system and reduced system ?)
     template<typename D>
-    typename SizeDepType<NV>::template ColsReturn<D>::Type
-    jointCols(Eigen::MatrixBase<D> & A) const
+    typename SizeDepType<NV>::template ColsReturn<D>::Type jointCols(Eigen::MatrixBase<D> & A) const
     {
       return derived().jointCols_impl(A.derived());
     }
@@ -494,8 +493,7 @@ namespace pinocchio
 
     // Non-const access
     template<typename D>
-    typename SizeDepType<NV>::template RowsReturn<D>::Type
-    jointRows(Eigen::MatrixBase<D> & A) const
+    typename SizeDepType<NV>::template RowsReturn<D>::Type jointRows(Eigen::MatrixBase<D> & A) const
     {
       return derived().jointRows_impl(A.derived());
     }

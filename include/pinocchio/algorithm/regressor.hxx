@@ -363,6 +363,11 @@ namespace pinocchio
       const Eigen::MatrixBase<TangentVectorType1> & v,
       const Eigen::MatrixBase<TangentVectorType2> & a)
     {
+      assert(
+        (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
+         == false)
+        && "Algorithm not supported for mimic joints");
+
       typedef typename Model::JointIndex JointIndex;
 
       const JointIndex i = jmodel.id();

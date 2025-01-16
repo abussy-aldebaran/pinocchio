@@ -371,8 +371,7 @@ namespace pinocchio
       for (JointIndex i = jointId; i > 0; i = model.parents[i])
       {
         Pass::run(
-          model.joints[i], data.joints[i],
-          typename Pass::ArgsType(model, data, q.derived(), J_));
+          model.joints[i], data.joints[i], typename Pass::ArgsType(model, data, q.derived(), J_));
       }
     }
 

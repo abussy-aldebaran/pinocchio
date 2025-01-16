@@ -106,6 +106,11 @@ namespace pinocchio
         const Eigen::MatrixBase<ConfigVectorType> & q,
         const Eigen::MatrixBase<TangentVectorType> & v)
       {
+        assert(
+          (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
+           == false)
+          && "Algorithm not supported for mimic joints");
+
         typedef typename Model::JointIndex JointIndex;
         typedef typename Data::Motion Motion;
 
@@ -169,7 +174,8 @@ namespace pinocchio
 
         Force & fi = data.of[i];
 
-        jmodel.jointVelocityExtendedModelSelector(data.u).noalias() -= Jcols.transpose() * fi.toVector();
+        jmodel.jointVelocityExtendedModelSelector(data.u).noalias() -=
+          Jcols.transpose() * fi.toVector();
 
         jdata.U().noalias() = Ia * Jcols;
         jdata.StU().noalias() = Jcols.transpose() * jdata.U();
@@ -184,8 +190,9 @@ namespace pinocchio
         {
           Ia.noalias() -= jdata.UDinv() * jdata.U().transpose();
 
-          fi.toVector().noalias() += Ia * data.oa_gf[i].toVector()
-                                     + jdata.UDinv() * jmodel.jointVelocityExtendedModelSelector(data.u);
+          fi.toVector().noalias() +=
+            Ia * data.oa_gf[i].toVector()
+            + jdata.UDinv() * jmodel.jointVelocityExtendedModelSelector(data.u);
           data.oYaba[parent] += Ia;
           data.of[parent] += fi;
         }
@@ -379,6 +386,11 @@ namespace pinocchio
         const Eigen::MatrixBase<ConfigVectorType> & q,
         const Eigen::MatrixBase<TangentVectorType> & v)
       {
+        assert(
+          (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
+           == false)
+          && "Algorithm not supported for mimic joints");
+
         typedef typename Model::JointIndex JointIndex;
 
         const JointIndex i = jmodel.id();
@@ -426,13 +438,15 @@ namespace pinocchio
 
         jmodel.jointVelocityExtendedModelSelector(data.u) -= jdata.S().transpose() * data.f[i];
         jmodel.calc_aba(
-          jdata.derived(), jmodel.jointVelocityExtendedModelSelector(model.armature), Ia, parent > 0);
+          jdata.derived(), jmodel.jointVelocityExtendedModelSelector(model.armature), Ia,
+          parent > 0);
 
         if (parent > 0)
         {
           Force & pa = data.f[i];
-          pa.toVector().noalias() += Ia * data.a_gf[i].toVector()
-                                     + jdata.UDinv() * jmodel.jointVelocityExtendedModelSelector(data.u);
+          pa.toVector().noalias() +=
+            Ia * data.a_gf[i].toVector()
+            + jdata.UDinv() * jmodel.jointVelocityExtendedModelSelector(data.u);
           data.Yaba[parent] += internal::SE3actOn<Scalar>::run(data.liMi[i], Ia);
           data.f[parent] += data.liMi[i].act(pa);
         }
@@ -621,6 +635,11 @@ namespace pinocchio
         Data & data,
         const Eigen::MatrixBase<ConfigVectorType> & q)
       {
+        assert(
+          (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
+           == false)
+          && "Algorithm not supported for mimic joints");
+
         typedef typename Model::JointIndex JointIndex;
 
         const JointIndex & i = jmodel.id();

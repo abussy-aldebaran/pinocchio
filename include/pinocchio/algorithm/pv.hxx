@@ -191,8 +191,9 @@ namespace pinocchio
 
       if (parent > 0)
       {
-        pa.toVector().noalias() += Ia * data.a_bias[i].toVector()
-                                   + jdata.UDinv() * jmodel.jointVelocityExtendedModelSelector(data.u);
+        pa.toVector().noalias() +=
+          Ia * data.a_bias[i].toVector()
+          + jdata.UDinv() * jmodel.jointVelocityExtendedModelSelector(data.u);
         data.Yaba[parent] += impl::internal::SE3actOn<Scalar>::run(data.liMi[i], Ia);
         data.f[parent] += data.liMi[i].act(pa);
       }
@@ -311,7 +312,8 @@ namespace pinocchio
       const JointIndex parent = model.parents[i];
 
       // Abusing otherwise unused data.tau below.
-      jmodel.jointVelocityExtendedModelSelector(data.tau).noalias() = jdata.S().transpose() * data.f[i];
+      jmodel.jointVelocityExtendedModelSelector(data.tau).noalias() =
+        jdata.S().transpose() * data.f[i];
       jmodel.jointVelocitySelector(data.u) -= jmodel.jointVelocitySelector(data.tau);
       data.f[i].toVector().noalias() -=
         jdata.UDinv() * jmodel.jointVelocityExtendedModelSelector(data.tau);

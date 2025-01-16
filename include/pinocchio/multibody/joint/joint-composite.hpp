@@ -542,8 +542,7 @@ namespace pinocchio
       return A.middleCols(Base::i_j, nj());
     }
     template<typename D>
-    typename SizeDepType<NV>::template ColsReturn<D>::Type
-    jointCols(Eigen::MatrixBase<D> & A) const
+    typename SizeDepType<NV>::template ColsReturn<D>::Type jointCols(Eigen::MatrixBase<D> & A) const
     {
       return A.middleCols(Base::i_v, nv());
     }

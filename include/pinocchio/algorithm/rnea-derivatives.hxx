@@ -306,8 +306,8 @@ namespace pinocchio
         else
           data.oMi[i] = data.liMi[i];
 
-        data.a[i] =
-          jdata.S() * jmodel.jointVelocityExtendedModelSelector(a) + jdata.c() + (data.v[i] ^ jdata.v());
+        data.a[i] = jdata.S() * jmodel.jointVelocityExtendedModelSelector(a) + jdata.c()
+                    + (data.v[i] ^ jdata.v());
         if (parent > 0)
         {
           data.a[i] += data.liMi[i].actInv(data.a[parent]);

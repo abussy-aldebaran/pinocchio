@@ -35,6 +35,11 @@ namespace pinocchio
       Data & data,
       const Eigen::MatrixBase<Matrix3xOut> & vcom_partial_dq)
     {
+      assert(
+        (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
+         == false)
+        && "Algorithm not supported for mimic joints");
+
       typedef typename Model::JointIndex JointIndex;
       typedef typename Data::Motion Motion;
 

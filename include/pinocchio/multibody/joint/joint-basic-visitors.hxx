@@ -195,8 +195,9 @@ namespace pinocchio
 
   template<typename InputType, typename ReturnType>
   struct jointConfigExtendedModelSelectorVisitor
-  : fusion::
-      JointUnaryVisitorBase<jointConfigExtendedModelSelectorVisitor<InputType, ReturnType>, ReturnType>
+  : fusion::JointUnaryVisitorBase<
+      jointConfigExtendedModelSelectorVisitor<InputType, ReturnType>,
+      ReturnType>
   {
     typedef boost::fusion::vector<InputType> ArgsType;
 

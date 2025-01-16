@@ -51,6 +51,11 @@ namespace pinocchio
         const Eigen::MatrixBase<TangentVectorType1> & v,
         const Eigen::MatrixBase<TangentVectorType2> & a)
       {
+        assert(
+          (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
+           == false)
+          && "Algorithm not supported for mimic joints");
+
         typedef typename Model::JointIndex JointIndex;
         typedef typename Data::SE3 SE3;
         typedef typename Data::Motion Motion;
@@ -76,7 +81,8 @@ namespace pinocchio
         if (parent > 0)
           vi += data.liMi[i].actInv(data.v[parent]);
 
-        ai = jdata.S() * jmodel.jointVelocityExtendedModelSelector(a) + jdata.c() + (vi ^ jdata.v());
+        ai =
+          jdata.S() * jmodel.jointVelocityExtendedModelSelector(a) + jdata.c() + (vi ^ jdata.v());
         if (parent > 0)
           ai += data.liMi[i].actInv(data.a[parent]);
 

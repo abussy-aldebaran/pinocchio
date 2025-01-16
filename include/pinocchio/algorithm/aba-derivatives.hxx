@@ -43,6 +43,11 @@ namespace pinocchio
         const Eigen::MatrixBase<ConfigVectorType> & q,
         const Eigen::MatrixBase<TangentVectorType> & v)
       {
+        assert(
+          (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
+           == false)
+          && "Algorithm not supported for mimic joints");
+
         typedef typename Model::JointIndex JointIndex;
 
         const JointIndex i = jmodel.id();
@@ -162,8 +167,8 @@ namespace pinocchio
         {
           Ia.noalias() -= jdata.UDinv() * jdata.U().transpose();
 
-          fi.toVector().noalias() += Ia * data.oa_gf[i].toVector()
-                                     + jdata.UDinv() * jmodel.jointVelocitySelector(data.u);
+          fi.toVector().noalias() +=
+            Ia * data.oa_gf[i].toVector() + jdata.UDinv() * jmodel.jointVelocitySelector(data.u);
           data.oYaba[parent] += Ia;
           data.of[parent] += fi;
         }

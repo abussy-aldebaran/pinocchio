@@ -27,6 +27,11 @@ namespace pinocchio
       const Model & model,
       Data & data)
     {
+      assert(
+        (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
+         == false)
+        && "Algorithm not supported for mimic joints");
+
       const JointIndex & i = jmodel.id();
       data.kinetic_energy += model.inertias[i].vtiv(data.v[i]);
       data.kinetic_energy += (jmodel.jointVelocityExtendedModelSelector(model.armature).array()

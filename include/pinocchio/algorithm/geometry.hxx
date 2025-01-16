@@ -45,9 +45,7 @@ namespace pinocchio
     {
       const Model::JointIndex joint_id = geom_model.geometryObjects[i].parentJoint;
       if (joint_id > 0)
-        geom_data.oMg[i] =
-          (data.oMi[joint_id]
-           * geom_model.geometryObjects[i].placement);
+        geom_data.oMg[i] = (data.oMi[joint_id] * geom_model.geometryObjects[i].placement);
       else
         geom_data.oMg[i] = geom_model.geometryObjects[i].placement;
     }

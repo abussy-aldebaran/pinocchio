@@ -41,6 +41,11 @@ namespace pinocchio
       const Model & model,
       Data & data)
     {
+      assert(
+        (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
+         == false)
+        && "Algorithm not supported for mimic joints");
+
       typedef typename Model::JointIndex JointIndex;
       typedef typename Data::Motion Motion;
 
@@ -81,8 +86,8 @@ namespace pinocchio
         Motion & oa_gf = data.oa_gf[i];
         ColsBlock dAdv_cols = jmodel.jointCols(data.dAdv);
         const typename Data::TangentVectorType & a = data.ddq;
-        data.a[i] =
-          jdata.S() * jmodel.jointVelocityExtendedModelSelector(a) + jdata.c() + (data.v[i] ^ jdata.v());
+        data.a[i] = jdata.S() * jmodel.jointVelocityExtendedModelSelector(a) + jdata.c()
+                    + (data.v[i] ^ jdata.v());
         if (parent > 0)
           data.a[i] += data.liMi[i].actInv(data.a[parent]);
         oa = data.oMi[i].act(data.a[i]);
