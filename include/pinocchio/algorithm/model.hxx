@@ -837,12 +837,12 @@ namespace pinocchio
   {
     PINOCCHIO_CHECK_INPUT_ARGUMENT(
       index_primary <= (size_t)input_model.njoints,
-      "index of primary is greater than the total of joints");
+      "index_primary is greater than the total of joints");
     PINOCCHIO_CHECK_INPUT_ARGUMENT(
       index_secondary <= (size_t)input_model.njoints,
-      "index of primary is greater than the total of joints");
+      "index_primary is greater than the total of joints");
     PINOCCHIO_CHECK_INPUT_ARGUMENT(
-      index_primary < index_secondary, "index of primary is greater than secondary");
+      index_primary < index_secondary, "index_primary is greater than sindex_secondary");
 
     typedef ModelTpl<Scalar, Options, JointCollectionTpl> Model;
     typedef typename Model::JointModel JointModel;
