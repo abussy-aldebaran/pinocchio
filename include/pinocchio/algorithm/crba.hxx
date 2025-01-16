@@ -76,7 +76,7 @@ namespace pinocchio
     /// the joints i+[1..n-1] will have idx_v greater than the joint j. This patch compute
     /// this "left out" part of the M matrix.
     template<typename Scalar, int Options, template<typename, int> class JointCollectionTpl>
-    static inline void mimic_patch_CrbaWorldConventionBackwardStep(
+    static void mimic_patch_CrbaWorldConventionBackwardStep(
       const JointModelBase<JointModelMimicTpl<Scalar, Options, JointCollectionTpl>> & jmodel,
       const ModelTpl<Scalar, Options, JointCollectionTpl> & model,
       DataTpl<Scalar, Options, JointCollectionTpl> & data)
@@ -188,7 +188,7 @@ namespace pinocchio
       typename Scalar,
       int Options,
       template<typename, int> class JointCollectionTpl>
-    static inline void mimic_patch_CrbaLocalConventionBackwardStep(
+    static void mimic_patch_CrbaLocalConventionBackwardStep(
       const JointModelBase<JointModel> &,
       const ModelTpl<Scalar, Options, JointCollectionTpl> &,
       DataTpl<Scalar, Options, JointCollectionTpl> &)
