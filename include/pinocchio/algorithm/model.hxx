@@ -129,7 +129,7 @@ namespace pinocchio
           {
             go.parentFrame = parentFrame;
           }
-          go.placement = static_cast<GeometryObject::SE3>(pframe.placement * pfMAB) * go.placement;
+          go.placement = (pframe.placement * pfMAB) * go.placement;
           geomModel.addGeometryObject(go);
         }
       }
@@ -799,7 +799,7 @@ namespace pinocchio
         {
           const FrameIndex reduced_frame_id = reduced_model.getFrameId(parent_joint_name);
           reduced_joint_id = reduced_model.frames[reduced_frame_id].parentJoint;
-          relative_placement = static_cast<SE3>(reduced_model.frames[reduced_frame_id].placement);
+          relative_placement = reduced_model.frames[reduced_frame_id].placement;
         }
 
         GeometryObject reduced_geom(geom);
