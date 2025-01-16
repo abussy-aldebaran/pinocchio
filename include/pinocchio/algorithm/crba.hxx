@@ -92,7 +92,7 @@ namespace pinocchio
       // Traverse the tree backward from parent of mimicking (secondary) joint to common ancestor
       for (size_t k = model.supports[secondary_id].size() - 2; k >= ancestor_sec; k--)
       {
-        const JointIndex i = model.supports[secondary_id].at(k);
+        const JointIndex i = model.supports[secondary_id][k];
 
         // Skip the common ancestor if it's not the primary id
         // as this computation would be canceled by the next loop forward
@@ -103,12 +103,12 @@ namespace pinocchio
           .middleCols(model.joints[i].idx_v(), model.joints[i].nv())
           .noalias() +=
           data.Ag.middleCols(jmodel.idx_v(), jmodel.derived().jmodel().nv()).transpose()
-          * model.joints.at(i).jointJacCols(data.J);
+          * model.joints[i].jointJacCols(data.J);
       }
       // Traverse the kinematic tree forward from common ancestor to mimicked (primary) joint
       for (size_t k = ancestor_prim + 1; k < model.supports[primary_id].size(); k++)
       {
-        const JointIndex i = model.supports[primary_id].at(k);
+        const JointIndex i = model.supports[primary_id][k];
         jmodel.jointVelCols(data.M)
           .middleRows(model.joints[i].idx_v(), model.joints[i].nv())
           .noalias() -= model.joints[i].jointJacCols(data.J).transpose()
