@@ -160,8 +160,7 @@ namespace pinocchio
       updateMimicIds(
         const JointModel & jmodel, const Model & /*old_model*/, const Model & /*new_model*/)
       {
-        JointModel res(jmodel);
-        return res;
+        return jmodel;
       }
 
       template<typename JointModel>
