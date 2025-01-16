@@ -372,7 +372,7 @@ namespace pinocchio
       {
         Pass::run(
           model.joints[i], data.joints[i],
-          typename Pass::ArgsType(model, data, q.derived(), J_.const_cast_derived()));
+          typename Pass::ArgsType(model, data, q.derived(), J_));
       }
     }
 
