@@ -199,7 +199,6 @@ namespace pinocchio
       typedef typename Matrix6xLikeOut::ColXpr ColXprOut;
       typedef MotionRef<ColXprOut> MotionOut;
 
-      const int colRefIn = nj(model.joints[joint_id]) + idx_j(model.joints[joint_id]) - 1;
       switch (rf)
       {
       case WORLD: {
