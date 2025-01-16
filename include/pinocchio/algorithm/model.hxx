@@ -850,11 +850,10 @@ namespace pinocchio
     output_model = input_model;
 
     output_model.joints[index_secondary] = JointModelMimic(
-      input_model.joints.at(index_secondary), output_model.joints.at(index_primary), scaling,
-      offset);
+      input_model.joints[index_secondary], output_model.joints[index_primary], scaling, offset);
 
-    int old_nq = input_model.joints.at(index_secondary).nq();
-    int old_nv = input_model.joints.at(index_secondary).nv();
+    int old_nq = input_model.joints[index_secondary].nq();
+    int old_nv = input_model.joints[index_secondary].nv();
     output_model.nq = input_model.nq - old_nq;
     output_model.nv = input_model.nv - old_nv;
     int nq = output_model.nq;
