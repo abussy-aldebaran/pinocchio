@@ -143,33 +143,33 @@ void test_joint_methods(
   const Model::ConfigVectorType vec_const(Model::ConfigVectorType::Ones(m));
 
   BOOST_CHECK(
-    jmodel.jointConfigFromDofSelector(vec) == jmodel_composite.jointConfigFromDofSelector(vec));
+    jmodel.jointConfigExtendedModelSelector(vec) == jmodel_composite.jointConfigExtendedModelSelector(vec));
   BOOST_CHECK(
-    jmodel.jointConfigFromDofSelector(vec_const)
-    == jmodel_composite.jointConfigFromDofSelector(vec_const));
+    jmodel.jointConfigExtendedModelSelector(vec_const)
+    == jmodel_composite.jointConfigExtendedModelSelector(vec_const));
 
   BOOST_CHECK(
-    jmodel.jointConfigFromNqSelector(vec) == jmodel_composite.jointConfigFromNqSelector(vec));
+    jmodel.jointConfigSelector(vec) == jmodel_composite.jointConfigSelector(vec));
   BOOST_CHECK(
-    jmodel.jointConfigFromNqSelector(vec_const)
-    == jmodel_composite.jointConfigFromNqSelector(vec_const));
+    jmodel.jointConfigSelector(vec_const)
+    == jmodel_composite.jointConfigSelector(vec_const));
 
   BOOST_CHECK(
-    jmodel.jointVelocityFromNvSelector(vec) == jmodel_composite.jointVelocityFromNvSelector(vec));
+    jmodel.jointVelocitySelector(vec) == jmodel_composite.jointVelocitySelector(vec));
   BOOST_CHECK(
-    jmodel.jointVelocityFromNvSelector(vec_const)
-    == jmodel_composite.jointVelocityFromNvSelector(vec_const));
+    jmodel.jointVelocitySelector(vec_const)
+    == jmodel_composite.jointVelocitySelector(vec_const));
 
   BOOST_CHECK(
-    jmodel.jointVelocityFromDofSelector(vec) == jmodel_composite.jointVelocityFromDofSelector(vec));
+    jmodel.jointVelocityExtendedModelSelector(vec) == jmodel_composite.jointVelocityExtendedModelSelector(vec));
   BOOST_CHECK(
-    jmodel.jointVelocityFromDofSelector(vec_const)
-    == jmodel_composite.jointVelocityFromDofSelector(vec_const));
+    jmodel.jointVelocityExtendedModelSelector(vec_const)
+    == jmodel_composite.jointVelocityExtendedModelSelector(vec_const));
 
-  BOOST_CHECK(jmodel.jointVelCols(mat) == jmodel_composite.jointVelCols(mat));
-  BOOST_CHECK(jmodel.jointVelCols(mat_const) == jmodel_composite.jointVelCols(mat_const));
-  BOOST_CHECK(jmodel.jointJacCols(mat) == jmodel_composite.jointJacCols(mat));
-  BOOST_CHECK(jmodel.jointJacCols(mat_const) == jmodel_composite.jointJacCols(mat_const));
+  BOOST_CHECK(jmodel.jointCols(mat) == jmodel_composite.jointCols(mat));
+  BOOST_CHECK(jmodel.jointCols(mat_const) == jmodel_composite.jointCols(mat_const));
+  BOOST_CHECK(jmodel.jointExtendedModelCols(mat) == jmodel_composite.jointExtendedModelCols(mat));
+  BOOST_CHECK(jmodel.jointExtendedModelCols(mat_const) == jmodel_composite.jointExtendedModelCols(mat_const));
 }
 
 struct TestJointComposite

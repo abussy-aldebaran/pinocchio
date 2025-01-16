@@ -197,9 +197,9 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       lgo.integrate(
-        jmodel.jointConfigFromNqSelector(q.derived()),
-        jmodel.jointVelocityFromNvSelector(v.derived()),
-        jmodel.jointConfigFromNqSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorOut, result)));
+        jmodel.jointConfigSelector(q.derived()),
+        jmodel.jointVelocitySelector(v.derived()),
+        jmodel.jointConfigSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorOut, result)));
     }
   };
 
@@ -244,9 +244,9 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       lgo.dIntegrate(
-        jmodel.jointConfigFromNqSelector(q.derived()),
-        jmodel.jointVelocityFromNvSelector(v.derived()),
-        jmodel.jointJacBlock(PINOCCHIO_EIGEN_CONST_CAST(JacobianMatrixType, mat)), arg, op);
+        jmodel.jointConfigSelector(q.derived()),
+        jmodel.jointVelocitySelector(v.derived()),
+        jmodel.jointExtendedModelBlock(PINOCCHIO_EIGEN_CONST_CAST(JacobianMatrixType, mat)), arg, op);
     }
   };
 
@@ -300,9 +300,9 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       lgo.dIntegrateTransport(
-        jmodel.jointConfigFromNqSelector(q.derived()),
-        jmodel.jointVelocityFromNvSelector(v.derived()), jmodel.jointJacRows(mat_in.derived()),
-        jmodel.jointJacRows(PINOCCHIO_EIGEN_CONST_CAST(JacobianMatrixOutType, mat_out)), arg);
+        jmodel.jointConfigSelector(q.derived()),
+        jmodel.jointVelocitySelector(v.derived()), jmodel.jointExtendedModelRows(mat_in.derived()),
+        jmodel.jointExtendedModelRows(PINOCCHIO_EIGEN_CONST_CAST(JacobianMatrixOutType, mat_out)), arg);
     }
   };
 
@@ -349,9 +349,9 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       lgo.dIntegrateTransport(
-        jmodel.jointConfigFromNqSelector(q.derived()),
-        jmodel.jointVelocityFromNvSelector(v.derived()),
-        jmodel.jointJacRows(PINOCCHIO_EIGEN_CONST_CAST(JacobianMatrixType, mat)), arg);
+        jmodel.jointConfigSelector(q.derived()),
+        jmodel.jointVelocitySelector(v.derived()),
+        jmodel.jointExtendedModelRows(PINOCCHIO_EIGEN_CONST_CAST(JacobianMatrixType, mat)), arg);
     }
   };
 
@@ -394,9 +394,9 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       lgo.dDifference(
-        jmodel.jointConfigFromNqSelector(q0.derived()),
-        jmodel.jointConfigFromNqSelector(q1.derived()),
-        jmodel.jointJacBlock(PINOCCHIO_EIGEN_CONST_CAST(JacobianMatrix, mat)), arg);
+        jmodel.jointConfigSelector(q0.derived()),
+        jmodel.jointConfigSelector(q1.derived()),
+        jmodel.jointExtendedModelBlock(PINOCCHIO_EIGEN_CONST_CAST(JacobianMatrix, mat)), arg);
     }
   };
 
@@ -441,9 +441,9 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       lgo.interpolate(
-        jmodel.jointConfigFromNqSelector(q0.derived()),
-        jmodel.jointConfigFromNqSelector(q1.derived()), u,
-        jmodel.jointConfigFromNqSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorOut, result)));
+        jmodel.jointConfigSelector(q0.derived()),
+        jmodel.jointConfigSelector(q1.derived()), u,
+        jmodel.jointConfigSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorOut, result)));
     }
   };
 
@@ -482,9 +482,9 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       lgo.difference(
-        jmodel.jointConfigFromNqSelector(q0.derived()),
-        jmodel.jointConfigFromNqSelector(q1.derived()),
-        jmodel.jointVelocityFromNvSelector(PINOCCHIO_EIGEN_CONST_CAST(TangentVectorOut, result)));
+        jmodel.jointConfigSelector(q0.derived()),
+        jmodel.jointConfigSelector(q1.derived()),
+        jmodel.jointVelocitySelector(PINOCCHIO_EIGEN_CONST_CAST(TangentVectorOut, result)));
     }
   };
 
@@ -527,8 +527,8 @@ namespace pinocchio
       typename LieGroupMap::template operation<JointModel>::type lgo;
       DistanceVectorOut & distances_ = PINOCCHIO_EIGEN_CONST_CAST(DistanceVectorOut, distances);
       distances_[(Eigen::DenseIndex)i] += lgo.squaredDistance(
-        jmodel.jointConfigFromNqSelector(q0.derived()),
-        jmodel.jointConfigFromNqSelector(q1.derived()));
+        jmodel.jointConfigSelector(q0.derived()),
+        jmodel.jointConfigSelector(q1.derived()));
     }
   };
 
@@ -561,8 +561,8 @@ namespace pinocchio
       typedef typename Visitor::LieGroupMap LieGroupMap;
       typename LieGroupMap::template operation<JointModel>::type lgo;
       squaredDistance += lgo.squaredDistance(
-        jmodel.jointConfigFromNqSelector(q0.derived()),
-        jmodel.jointConfigFromNqSelector(q1.derived()));
+        jmodel.jointConfigSelector(q0.derived()),
+        jmodel.jointConfigSelector(q1.derived()));
     }
   };
 
@@ -601,9 +601,9 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       lgo.randomConfiguration(
-        jmodel.jointConfigFromNqSelector(lowerLimits.derived()),
-        jmodel.jointConfigFromNqSelector(upperLimits.derived()),
-        jmodel.jointConfigFromNqSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorOut, q)));
+        jmodel.jointConfigSelector(lowerLimits.derived()),
+        jmodel.jointConfigSelector(upperLimits.derived()),
+        jmodel.jointConfigSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorOut, q)));
     }
   };
 
@@ -632,7 +632,7 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       lgo.normalize(
-        jmodel.jointConfigFromNqSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorType, qout)));
+        jmodel.jointConfigSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorType, qout)));
     }
   };
 
@@ -663,7 +663,7 @@ namespace pinocchio
       typedef typename Visitor::LieGroupMap LieGroupMap;
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
-      res &= lgo.isNormalized(jmodel.jointConfigFromNqSelector(q.derived()), prec);
+      res &= lgo.isNormalized(jmodel.jointConfigSelector(q.derived()), prec);
     }
   };
 
@@ -699,8 +699,8 @@ namespace pinocchio
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
       isSame &= lgo.isSameConfiguration(
-        jmodel.jointConfigFromNqSelector(q1.derived()),
-        jmodel.jointConfigFromNqSelector(q2.derived()), prec);
+        jmodel.jointConfigSelector(q1.derived()),
+        jmodel.jointConfigSelector(q2.derived()), prec);
     }
   };
 
@@ -729,7 +729,7 @@ namespace pinocchio
       typedef typename Visitor::LieGroupMap LieGroupMap;
 
       typename LieGroupMap::template operation<JointModel>::type lgo;
-      jmodel.jointConfigFromNqSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorType, neutral_elt)) =
+      jmodel.jointConfigSelector(PINOCCHIO_EIGEN_CONST_CAST(ConfigVectorType, neutral_elt)) =
         lgo.neutral();
     }
   };
@@ -764,7 +764,7 @@ namespace pinocchio
       typedef typename LieGroupMap::template operation<JointModel>::type LieGroup;
       LieGroup lgo;
       lgo.integrateCoeffWiseJacobian(
-        jmodel.jointConfigFromNqSelector(q.derived()),
+        jmodel.jointConfigSelector(q.derived()),
         PINOCCHIO_EIGEN_CONST_CAST(JacobianMatrix, jacobian)
           .template block<LieGroup::NQ, LieGroup::NV>(
             jmodel.idx_q(), jmodel.idx_v(), jmodel.nq(), jmodel.nv()));

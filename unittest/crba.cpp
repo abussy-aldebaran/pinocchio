@@ -172,8 +172,8 @@ void test_mimic_against_full_model(
   {
     const double joint_ratio = ((n == secondary_id) ? ratio : 1.0);
     const double joint_offset = ((n == secondary_id) ? offset : 0.0);
-    model_full.joints[n].jointConfigFromDofSelector(q_full) =
-      joint_ratio * model_mimic.joints[n].jointConfigFromDofSelector(q_mimic)
+    model_full.joints[n].jointConfigExtendedModelSelector(q_full) =
+      joint_ratio * model_mimic.joints[n].jointConfigExtendedModelSelector(q_mimic)
       + joint_offset * Eigen::VectorXd::Ones(model_full.joints[n].nq());
   }
 

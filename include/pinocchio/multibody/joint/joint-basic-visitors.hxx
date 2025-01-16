@@ -194,9 +194,9 @@ namespace pinocchio
   }
 
   template<typename InputType, typename ReturnType>
-  struct JointConfigFromDofSelectorVisitor
+  struct jointConfigExtendedModelSelectorVisitor
   : fusion::
-      JointUnaryVisitorBase<JointConfigFromDofSelectorVisitor<InputType, ReturnType>, ReturnType>
+      JointUnaryVisitorBase<jointConfigExtendedModelSelectorVisitor<InputType, ReturnType>, ReturnType>
   {
     typedef boost::fusion::vector<InputType> ArgsType;
 
@@ -205,7 +205,7 @@ namespace pinocchio
     {
       // Converting a VectorBlock of anysize (static or dynamic) to another vector block of anysize
       // (static or dynamic) since there is no copy constructor.
-      auto vectorBlock = jmodel.jointConfigFromDofSelector(a);
+      auto vectorBlock = jmodel.jointConfigExtendedModelSelector(a);
 
       // VectorBlock does not implemet such getter, hack the Eigen::Block base class to retreive
       // such values.

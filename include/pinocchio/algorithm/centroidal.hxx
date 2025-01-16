@@ -136,10 +136,10 @@ namespace pinocchio
         const JointIndex & i = jmodel.id();
         const JointIndex & parent = model.parents[i];
 
-        ColsBlock J_cols = jmodel.jointJacCols(data.J);
+        ColsBlock J_cols = jmodel.jointExtendedModelCols(data.J);
         J_cols = data.oMi[i].act(jdata.S());
 
-        ColsBlock Ag_cols = jmodel.jointVelCols(data.Ag);
+        ColsBlock Ag_cols = jmodel.jointCols(data.Ag);
         motionSet::inertiaAction<ADDTO>(data.oYcrb[i], J_cols, Ag_cols);
 
         data.oYcrb[parent] += data.oYcrb[i];
@@ -267,10 +267,10 @@ namespace pinocchio
         const Inertia & Y = data.oYcrb[i];
         const typename Inertia::Matrix6 & doYcrb = data.doYcrb[i];
 
-        ColsBlock J_cols = jmodel.jointJacCols(data.J);
+        ColsBlock J_cols = jmodel.jointExtendedModelCols(data.J);
         J_cols = data.oMi[i].act(jdata.S());
 
-        ColsBlock dJ_cols = jmodel.jointJacCols(data.dJ);
+        ColsBlock dJ_cols = jmodel.jointExtendedModelCols(data.dJ);
         motionSet::motionAction(data.ov[i], J_cols, dJ_cols);
 
         data.oYcrb[parent] += Y;
@@ -278,11 +278,11 @@ namespace pinocchio
           data.doYcrb[parent] += doYcrb;
 
         // Calc Ag
-        ColsBlock Ag_cols = jmodel.jointVelCols(data.Ag);
+        ColsBlock Ag_cols = jmodel.jointCols(data.Ag);
         motionSet::inertiaAction(Y, J_cols, Ag_cols);
 
         // Calc dAg = Ivx + vxI
-        ColsBlock dAg_cols = jmodel.jointVelCols(data.dAg);
+        ColsBlock dAg_cols = jmodel.jointCols(data.dAg);
         dAg_cols.noalias() = doYcrb * J_cols;
         motionSet::inertiaAction<ADDTO>(Y, dJ_cols, dAg_cols);
       }

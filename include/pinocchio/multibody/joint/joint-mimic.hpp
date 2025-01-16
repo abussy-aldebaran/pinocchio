@@ -848,7 +848,7 @@ namespace pinocchio
     // Const access
     template<typename D>
     typename SizeDepType<NQ>::template SegmentReturn<D>::ConstType
-    jointConfigFromDofSelector_impl(const Eigen::MatrixBase<D> & a) const
+    jointConfigExtendedModelSelector_impl(const Eigen::MatrixBase<D> & a) const
     {
       return SizeDepType<NQ>::segment(a.derived(), idx_q(), m_jmodel_ref.nq());
     }
@@ -856,7 +856,7 @@ namespace pinocchio
     // Non-const access
     template<typename D>
     typename SizeDepType<NQ>::template SegmentReturn<D>::Type
-    jointConfigFromDofSelector_impl(Eigen::MatrixBase<D> & a) const
+    jointConfigExtendedModelSelector_impl(Eigen::MatrixBase<D> & a) const
     {
       return SizeDepType<NQ>::segment(a.derived(), idx_q(), m_jmodel_ref.nq());
     }
@@ -865,7 +865,7 @@ namespace pinocchio
     // Const access
     template<typename D>
     typename SizeDepType<NV>::template ColsReturn<D>::ConstType
-    jointVelCols_impl(const Eigen::MatrixBase<D> & A) const
+    jointCols_impl(const Eigen::MatrixBase<D> & A) const
     {
       return SizeDepType<NV>::middleCols(A.derived(), idx_v(), m_jmodel_ref.nv());
     }
@@ -873,7 +873,7 @@ namespace pinocchio
     // Non-const access
     template<typename D>
     typename SizeDepType<NV>::template ColsReturn<D>::Type
-    jointVelCols_impl(Eigen::MatrixBase<D> & A) const
+    jointCols_impl(Eigen::MatrixBase<D> & A) const
     {
       return SizeDepType<NV>::middleCols(A.derived(), idx_v(), m_jmodel_ref.nv());
     }
@@ -890,7 +890,7 @@ namespace pinocchio
     // Non-const access
     template<typename D>
     typename SizeDepType<NV>::template RowsReturn<D>::Type
-    jointVelRows_impl(Eigen::MatrixBase<D> & A) const
+    jointRows_impl(Eigen::MatrixBase<D> & A) const
     {
       return SizeDepType<NV>::middleRows(A.derived(), idx_v(), m_jmodel_ref.nv());
     }
@@ -900,7 +900,7 @@ namespace pinocchio
     // // Const access
     template<typename D>
     typename SizeDepType<NV>::template BlockReturn<D>::ConstType
-    jointVelBlock_impl(const Eigen::MatrixBase<D> & Mat) const
+    jointBlock_impl(const Eigen::MatrixBase<D> & Mat) const
     {
       return SizeDepType<NV>::block(
         Mat.derived(), idx_v(), idx_v(), m_jmodel_ref.nv(), m_jmodel_ref.nv());
@@ -909,7 +909,7 @@ namespace pinocchio
     // Non-const access
     template<typename D>
     typename SizeDepType<NV>::template BlockReturn<D>::Type
-    jointVelBlock_impl(Eigen::MatrixBase<D> & Mat) const
+    jointBlock_impl(Eigen::MatrixBase<D> & Mat) const
     {
       return SizeDepType<NV>::block(
         Mat.derived(), idx_v(), idx_v(), m_jmodel_ref.nv(), m_jmodel_ref.nv());

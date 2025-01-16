@@ -82,12 +82,12 @@ namespace pinocchio
         typename SizeDepType<JointModel::NV>::template ColsReturn<typename Data::Matrix6x>::Type
           ColsBlock;
       ColsBlock J_cols =
-        jmodel.jointJacCols(data.J); // data.J has all the phi (in world frame) stacked in columns
+        jmodel.jointExtendedModelCols(data.J); // data.J has all the phi (in world frame) stacked in columns
       ColsBlock psid_cols =
-        jmodel.jointVelCols(data.psid); // psid_cols is the psi_dot in world frame
+        jmodel.jointCols(data.psid); // psid_cols is the psi_dot in world frame
       ColsBlock psidd_cols =
-        jmodel.jointVelCols(data.psidd); // psidd_cols is the psi_dotdot in world frame
-      ColsBlock dJ_cols = jmodel.jointJacCols(data.dJ); // This here is phi_dot in world frame
+        jmodel.jointCols(data.psidd); // psidd_cols is the psi_dotdot in world frame
+      ColsBlock dJ_cols = jmodel.jointExtendedModelCols(data.dJ); // This here is phi_dot in world frame
 
       J_cols.noalias() =
         data.oMi[i].act(jdata.S()); // J_cols is just the phi in world frame for a joint
@@ -99,7 +99,7 @@ namespace pinocchio
         psidd_cols); // This ov here is v(p(i)) , psi_dotdot calcs
       ov += vJ;
       oa +=
-        (ov ^ vJ) + data.oMi[i].act(jdata.S() * jmodel.jointVelocityFromDofSelector(a) + jdata.c());
+        (ov ^ vJ) + data.oMi[i].act(jdata.S() * jmodel.jointVelocityExtendedModelSelector(a) + jdata.c());
       motionSet::motionAction(ov, J_cols, dJ_cols); // This here is phi_dot, here ov used is v(p(i))
                                                     // + vJ Composite rigid body inertia
       Inertia & oY = data.oYcrb[i];

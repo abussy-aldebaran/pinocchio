@@ -160,6 +160,7 @@ namespace pinocchio
 
     for (JointIndex j = 1; int(j) < model.njoints; ++j)
     {
+      // do not check mimic joint, because nv = 0, but it has a subtree
       if (boost::get<JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>(&model.joints[j]))
         continue;
       JointIndex c = (JointIndex)data.lastChild[j];

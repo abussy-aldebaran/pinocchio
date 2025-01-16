@@ -250,11 +250,11 @@ BOOST_AUTO_TEST_CASE(append)
         const JointModel & joint_model_humanoid =
           humanoid.joints[humanoid.getJointId(model1.names[joint_id])];
         BOOST_CHECK(
-          joint_model_humanoid.jointConfigFromNqSelector(humanoid_config->second)
-          == joint_model1.jointConfigFromNqSelector(config_vector));
+          joint_model_humanoid.jointConfigSelector(humanoid_config->second)
+          == joint_model1.jointConfigSelector(config_vector));
         BOOST_CHECK(
-          joint_model_humanoid.jointConfigFromDofSelector(humanoid_config->second)
-          == joint_model1.jointConfigFromDofSelector(config_vector));
+          joint_model_humanoid.jointConfigExtendedModelSelector(humanoid_config->second)
+          == joint_model1.jointConfigExtendedModelSelector(config_vector));
         // std::cerr<<"humanoid "<<config_name<<" "<<model1.names[joint_id]<<std::endl;
       }
       else if (
@@ -264,21 +264,21 @@ BOOST_AUTO_TEST_CASE(append)
         const JointModel & joint_model_manipulator =
           manipulator.joints[manipulator.getJointId(model1.names[joint_id])];
         BOOST_CHECK(
-          joint_model_manipulator.jointConfigFromNqSelector(manipulator_config->second)
-          == joint_model1.jointConfigFromNqSelector(config_vector));
+          joint_model_manipulator.jointConfigSelector(manipulator_config->second)
+          == joint_model1.jointConfigSelector(config_vector));
         BOOST_CHECK(
-          joint_model_manipulator.jointConfigFromDofSelector(manipulator_config->second)
-          == joint_model1.jointConfigFromDofSelector(config_vector));
+          joint_model_manipulator.jointConfigExtendedModelSelector(manipulator_config->second)
+          == joint_model1.jointConfigExtendedModelSelector(config_vector));
         // std::cerr<<"manipulator "<<config_name<<" "<<model1.names[joint_id]<<std::endl;
       }
       else
       { // joint and key combo not found, should with neutral
         BOOST_CHECK(
-          joint_model1.jointConfigFromNqSelector(neutral_config_vector)
-          == joint_model1.jointConfigFromNqSelector(config_vector));
+          joint_model1.jointConfigSelector(neutral_config_vector)
+          == joint_model1.jointConfigSelector(config_vector));
         BOOST_CHECK(
-          joint_model1.jointConfigFromDofSelector(neutral_config_vector)
-          == joint_model1.jointConfigFromDofSelector(config_vector));
+          joint_model1.jointConfigExtendedModelSelector(neutral_config_vector)
+          == joint_model1.jointConfigExtendedModelSelector(config_vector));
         // std::cerr<<"neutral "<<config_name<<" "<<model1.names[joint_id]<<std::endl;
       }
     }
@@ -334,11 +334,11 @@ BOOST_AUTO_TEST_CASE(append)
         const JointModel & joint_model_humanoid =
           humanoid.joints[humanoid.getJointId(model.names[joint_id])];
         BOOST_CHECK(
-          joint_model_humanoid.jointConfigFromNqSelector(humanoid_config->second)
-          == joint_model.jointConfigFromNqSelector(config_vector));
+          joint_model_humanoid.jointConfigSelector(humanoid_config->second)
+          == joint_model.jointConfigSelector(config_vector));
         BOOST_CHECK(
-          joint_model_humanoid.jointConfigFromDofSelector(humanoid_config->second)
-          == joint_model.jointConfigFromDofSelector(config_vector));
+          joint_model_humanoid.jointConfigExtendedModelSelector(humanoid_config->second)
+          == joint_model.jointConfigExtendedModelSelector(config_vector));
         // std::cerr<<"humanoid "<<config_name<<" "<<model.names[joint_id]<<std::endl;
       }
       else if (
@@ -348,21 +348,21 @@ BOOST_AUTO_TEST_CASE(append)
         const JointModel & joint_model_manipulator =
           manipulator.joints[manipulator.getJointId(model.names[joint_id])];
         BOOST_CHECK(
-          joint_model_manipulator.jointConfigFromNqSelector(manipulator_config->second)
-          == joint_model.jointConfigFromNqSelector(config_vector));
+          joint_model_manipulator.jointConfigSelector(manipulator_config->second)
+          == joint_model.jointConfigSelector(config_vector));
         BOOST_CHECK(
-          joint_model_manipulator.jointConfigFromDofSelector(manipulator_config->second)
-          == joint_model.jointConfigFromDofSelector(config_vector));
+          joint_model_manipulator.jointConfigExtendedModelSelector(manipulator_config->second)
+          == joint_model.jointConfigExtendedModelSelector(config_vector));
         // std::cerr<<"manipulator "<<config_name<<" "<<model.names[joint_id]<<std::endl;
       }
       else
       { // joint and key combo not found, should with neutral
         BOOST_CHECK(
-          joint_model.jointConfigFromNqSelector(neutral_config_vector)
-          == joint_model.jointConfigFromNqSelector(config_vector));
+          joint_model.jointConfigSelector(neutral_config_vector)
+          == joint_model.jointConfigSelector(config_vector));
         BOOST_CHECK(
-          joint_model.jointConfigFromDofSelector(neutral_config_vector)
-          == joint_model.jointConfigFromDofSelector(config_vector));
+          joint_model.jointConfigExtendedModelSelector(neutral_config_vector)
+          == joint_model.jointConfigExtendedModelSelector(config_vector));
         // std::cerr<<"neutral "<<config_name<<" "<<model.names[joint_id]<<std::endl;
       }
     }
@@ -588,10 +588,10 @@ BOOST_AUTO_TEST_CASE(test_buildReducedModel)
     const JointIndex reference_joint_id =
       humanoid_model.getJointId(reduced_humanoid_model.names[joint_id]);
 
-    reduced_humanoid_model.joints[joint_id].jointConfigFromNqSelector(reduced_q) =
-      humanoid_model.joints[reference_joint_id].jointConfigFromNqSelector(q);
-    reduced_humanoid_model.joints[joint_id].jointConfigFromDofSelector(reduced_q) =
-      humanoid_model.joints[reference_joint_id].jointConfigFromDofSelector(q);
+    reduced_humanoid_model.joints[joint_id].jointConfigSelector(reduced_q) =
+      humanoid_model.joints[reference_joint_id].jointConfigSelector(q);
+    reduced_humanoid_model.joints[joint_id].jointConfigExtendedModelSelector(reduced_q) =
+      humanoid_model.joints[reference_joint_id].jointConfigExtendedModelSelector(q);
   }
 
   BOOST_CHECK(reduced_humanoid_model.referenceConfigurations["neutral"].isApprox(
@@ -714,10 +714,10 @@ BOOST_AUTO_TEST_CASE(test_buildReducedModel_with_geom)
     const JointIndex reference_joint_id =
       humanoid_model.getJointId(reduced_humanoid_model.names[joint_id]);
 
-    reduced_humanoid_model.joints[joint_id].jointConfigFromNqSelector(reduced_q) =
-      humanoid_model.joints[reference_joint_id].jointConfigFromNqSelector(q);
-    reduced_humanoid_model.joints[joint_id].jointConfigFromDofSelector(reduced_q) =
-      humanoid_model.joints[reference_joint_id].jointConfigFromDofSelector(q);
+    reduced_humanoid_model.joints[joint_id].jointConfigSelector(reduced_q) =
+      humanoid_model.joints[reference_joint_id].jointConfigSelector(q);
+    reduced_humanoid_model.joints[joint_id].jointConfigExtendedModelSelector(reduced_q) =
+      humanoid_model.joints[reference_joint_id].jointConfigExtendedModelSelector(q);
   }
 
   framesForwardKinematics(humanoid_model, data, q);
@@ -918,34 +918,34 @@ BOOST_AUTO_TEST_CASE(test_has_transform_to_mimic)
     if (mim_id != index_s)
     {
       BOOST_CHECK(
-        jmodel_mim.jointVelocityFromNvSelector(humanoid_mimic.effortLimit)
-        == jmodel_full.jointVelocityFromNvSelector(humanoid_model.effortLimit));
+        jmodel_mim.jointVelocitySelector(humanoid_mimic.effortLimit)
+        == jmodel_full.jointVelocitySelector(humanoid_model.effortLimit));
       BOOST_CHECK(
-        jmodel_mim.jointVelocityFromNvSelector(humanoid_mimic.velocityLimit)
-        == jmodel_full.jointVelocityFromNvSelector(humanoid_model.velocityLimit));
+        jmodel_mim.jointVelocitySelector(humanoid_mimic.velocityLimit)
+        == jmodel_full.jointVelocitySelector(humanoid_model.velocityLimit));
 
       BOOST_CHECK(
-        jmodel_mim.jointConfigFromNqSelector(humanoid_mimic.lowerPositionLimit)
-        == jmodel_full.jointConfigFromNqSelector(humanoid_model.lowerPositionLimit));
+        jmodel_mim.jointConfigSelector(humanoid_mimic.lowerPositionLimit)
+        == jmodel_full.jointConfigSelector(humanoid_model.lowerPositionLimit));
       BOOST_CHECK(
-        jmodel_mim.jointConfigFromNqSelector(humanoid_mimic.upperPositionLimit)
-        == jmodel_full.jointConfigFromNqSelector(humanoid_model.upperPositionLimit));
+        jmodel_mim.jointConfigSelector(humanoid_mimic.upperPositionLimit)
+        == jmodel_full.jointConfigSelector(humanoid_model.upperPositionLimit));
 
       BOOST_CHECK(
-        jmodel_mim.jointVelocityFromNvSelector(humanoid_mimic.armature)
-        == jmodel_full.jointVelocityFromNvSelector(humanoid_model.armature));
+        jmodel_mim.jointVelocitySelector(humanoid_mimic.armature)
+        == jmodel_full.jointVelocitySelector(humanoid_model.armature));
       BOOST_CHECK(
-        jmodel_mim.jointVelocityFromNvSelector(humanoid_mimic.rotorInertia)
-        == jmodel_full.jointVelocityFromNvSelector(humanoid_model.rotorInertia));
+        jmodel_mim.jointVelocitySelector(humanoid_mimic.rotorInertia)
+        == jmodel_full.jointVelocitySelector(humanoid_model.rotorInertia));
       BOOST_CHECK(
-        jmodel_mim.jointVelocityFromNvSelector(humanoid_mimic.rotorGearRatio)
-        == jmodel_full.jointVelocityFromNvSelector(humanoid_model.rotorGearRatio));
+        jmodel_mim.jointVelocitySelector(humanoid_mimic.rotorGearRatio)
+        == jmodel_full.jointVelocitySelector(humanoid_model.rotorGearRatio));
       BOOST_CHECK(
-        jmodel_mim.jointVelocityFromNvSelector(humanoid_mimic.friction)
-        == jmodel_full.jointVelocityFromNvSelector(humanoid_model.friction));
+        jmodel_mim.jointVelocitySelector(humanoid_mimic.friction)
+        == jmodel_full.jointVelocitySelector(humanoid_model.friction));
       BOOST_CHECK(
-        jmodel_mim.jointVelocityFromNvSelector(humanoid_mimic.damping)
-        == jmodel_full.jointVelocityFromNvSelector(humanoid_model.damping));
+        jmodel_mim.jointVelocitySelector(humanoid_mimic.damping)
+        == jmodel_full.jointVelocitySelector(humanoid_model.damping));
     }
   }
 }

@@ -386,11 +386,11 @@ namespace pinocchio
     // Const access
     template<typename D>
     typename SizeDepType<NV>::template SegmentReturn<D>::ConstType
-    jointConfigFromDofSelector_impl(const Eigen::MatrixBase<D> & a) const
+    jointConfigExtendedModelSelector_impl(const Eigen::MatrixBase<D> & a) const
     {
       typedef const Eigen::MatrixBase<D> & InputType;
       typedef typename SizeDepType<NV>::template SegmentReturn<D>::ConstType ReturnType;
-      typedef JointConfigFromDofSelectorVisitor<InputType, ReturnType> Visitor;
+      typedef jointConfigExtendedModelSelectorVisitor<InputType, ReturnType> Visitor;
       typename Visitor::ArgsType arg(a);
       return Visitor::run(*this, arg);
     }
@@ -398,11 +398,11 @@ namespace pinocchio
     // Non-const access
     template<typename D>
     typename SizeDepType<NV>::template SegmentReturn<D>::Type
-    jointConfigFromDofSelector_impl(Eigen::MatrixBase<D> & a) const
+    jointConfigExtendedModelSelector_impl(Eigen::MatrixBase<D> & a) const
     {
       typedef Eigen::MatrixBase<D> & InputType;
       typedef typename SizeDepType<NV>::template SegmentReturn<D>::Type ReturnType;
-      typedef JointConfigFromDofSelectorVisitor<InputType, ReturnType> Visitor;
+      typedef jointConfigExtendedModelSelectorVisitor<InputType, ReturnType> Visitor;
       typename Visitor::ArgsType arg(a);
       return Visitor::run(*this, arg);
     }

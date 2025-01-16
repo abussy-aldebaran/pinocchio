@@ -52,7 +52,7 @@ namespace pinocchio
         else
           data.oMi[i] = data.liMi[i];
 
-        jmodel.jointJacCols(data.J) = data.oMi[i].act(jdata.S());
+        jmodel.jointExtendedModelCols(data.J) = data.oMi[i].act(jdata.S());
 
         data.oYcrb[i] = data.oMi[i].act(model.inertias[i]);
       }
@@ -99,19 +99,19 @@ namespace pinocchio
         if (k == ancestor_sec && i != primary_id)
           continue;
 
-        jmodel.jointVelRows(data.M)
+        jmodel.jointRows(data.M)
           .middleCols(model.joints[i].idx_v(), model.joints[i].nv())
           .noalias() +=
           data.Ag.middleCols(jmodel.idx_v(), jmodel.derived().jmodel().nv()).transpose()
-          * model.joints[i].jointJacCols(data.J);
+          * model.joints[i].jointExtendedModelCols(data.J);
       }
       // Traverse the kinematic tree forward from common ancestor to mimicked (primary) joint
       for (size_t k = ancestor_prim + 1; k < model.supports[primary_id].size(); k++)
       {
         const JointIndex i = model.supports[primary_id][k];
-        jmodel.jointVelCols(data.M)
+        jmodel.jointCols(data.M)
           .middleRows(model.joints[i].idx_v(), model.joints[i].nv())
-          .noalias() -= model.joints[i].jointJacCols(data.J).transpose()
+          .noalias() -= model.joints[i].jointExtendedModelCols(data.J).transpose()
                         * data.Ag.middleCols(jmodel.idx_v(), jmodel.derived().jmodel().nv());
       }
     }
@@ -136,12 +136,12 @@ namespace pinocchio
         const JointIndex & i = jmodel.id();
 
         // Centroidal momentum map
-        ColsBlock Ag_cols = jmodel.jointVelCols(data.Ag);
-        ColsBlock J_cols = jmodel.jointJacCols(data.J);
+        ColsBlock Ag_cols = jmodel.jointCols(data.Ag);
+        ColsBlock J_cols = jmodel.jointExtendedModelCols(data.J);
         motionSet::inertiaAction<ADDTO>(data.oYcrb[i], J_cols, Ag_cols);
 
         // Joint Space Inertia Matrix
-        jmodel.jointVelRows(data.M).middleCols(jmodel.idx_v(), data.nvSubtree[i]).noalias() +=
+        jmodel.jointRows(data.M).middleCols(jmodel.idx_v(), data.nvSubtree[i]).noalias() +=
           J_cols.transpose() * data.Ag.middleCols(jmodel.idx_v(), data.nvSubtree[i]);
 
         mimic_patch_CrbaWorldConventionBackwardStep(jmodel, model, data);
@@ -255,9 +255,9 @@ namespace pinocchio
         if (k == ancestor_sec && i != primary_id)
           continue;
 
-        forceSet::se3Action(iMj, jmodel.jointVelCols(data.Fcrb[secondary_id]), iF);
+        forceSet::se3Action(iMj, jmodel.jointCols(data.Fcrb[secondary_id]), iF);
 
-        jmodel.jointVelRows(data.M)
+        jmodel.jointRows(data.M)
           .middleCols(model.joints[i].idx_v(), model.joints[i].nv())
           .noalias() += GetSNoMalloc::run(data.joints[i]).transpose() * iF;
       }
@@ -267,9 +267,9 @@ namespace pinocchio
         const JointIndex i = model.supports[primary_id][k];
         iMj = data.liMi[i].actInv(iMj);
 
-        forceSet::se3Action(iMj, jmodel.jointVelCols(data.Fcrb[secondary_id]), iF);
+        forceSet::se3Action(iMj, jmodel.jointCols(data.Fcrb[secondary_id]), iF);
 
-        jmodel.jointVelCols(data.M)
+        jmodel.jointCols(data.M)
           .middleRows(model.joints[i].idx_v(), model.joints[i].nv())
           .noalias() -= iF.transpose() * GetSNoMalloc::run(data.joints[i]);
       }
@@ -313,10 +313,10 @@ namespace pinocchio
 
         /* F[1:6,i] = Y*S */
         // data.Fcrb[i].block<6,JointModel::NV>(0,jmodel.idx_v()) = data.Ycrb[i] * jdata.S();
-        jmodel.jointVelCols(data.Fcrb[i]) += data.Ycrb[i] * jdata.S();
+        jmodel.jointCols(data.Fcrb[i]) += data.Ycrb[i] * jdata.S();
 
         /* M[i,SUBTREE] = S'*F[1:6,SUBTREE] */
-        jmodel.jointVelRows(data.M).middleCols(jmodel.idx_v(), data.nvSubtree[i]).noalias() +=
+        jmodel.jointRows(data.M).middleCols(jmodel.idx_v(), data.nvSubtree[i]).noalias() +=
           jdata.S().transpose() * data.Fcrb[i].middleCols(jmodel.idx_v(), data.nvSubtree[i]);
 
         const JointIndex & parent = model.parents[i];
