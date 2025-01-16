@@ -104,18 +104,20 @@ namespace pinocchio
   /**
    * @brief      Returns the relative placement of two joints expressed in the desired reference
    * frame. You must first call pinocchio::forwardKinematics to update placement values in data
-   * structure.
+   * structure. LOCAL convention should only be used when aba and crba algorithms are called in
+   * LOCAL convention as well.
    *
    * @param[in] model      The kinematic model
    * @param[in] data       Data associated to model
    * @param[in] jointId    Id of the reference joint
    * @param[in] jointId    Id of the target joint
-   * @param[in] convention Convention to use (compuputation is done using data.liMi if LOCAL, and
+   * @param[in] convention Convention to use (computation is done using data.liMi if LOCAL, and
    * data.oMi if WORLD).
    *
    * @return     The relative placement of the target joint wrt to the refence joint, expressed in
    * the desired reference frame.
    *
+   * \note  WORLD convention complexity is in O(1) and LOCAL is in O(n).
    */
   template<typename Scalar, int Options, template<typename, int> class JointCollectionTpl>
   SE3Tpl<Scalar, Options> getRelativePlacement(
