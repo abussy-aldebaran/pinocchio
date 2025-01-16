@@ -111,7 +111,7 @@ namespace pinocchio
         const JointIndex i = model.supports[primary_id].at(k);
         jmodel.jointVelCols(data.M)
           .middleRows(model.joints[i].idx_v(), model.joints[i].nv())
-          .noalias() -= model.joints.at(i).jointJacCols(data.J).transpose()
+          .noalias() -= model.joints[i].jointJacCols(data.J).transpose()
                         * data.Ag.middleCols(jmodel.idx_v(), jmodel.derived().jmodel().nv());
       }
     }
@@ -245,9 +245,9 @@ namespace pinocchio
       // Traverse the tree backward from parent of mimicking (secondary) joint to common ancestor
       for (size_t k = model.supports[secondary_id].size() - 2; k >= ancestor_sec; k--)
       {
-        const JointIndex i = model.supports[secondary_id].at(k);
+        const JointIndex i = model.supports[secondary_id][k];
         const JointIndex ui =
-          model.supports[secondary_id].at(k + 1); // Child link to compute placement
+          model.supports[secondary_id][k + 1]; // Child link to compute placement
         iMj = data.liMi[ui].act(iMj);
 
         // Skip the common ancestor if it's not the primary id
@@ -264,7 +264,7 @@ namespace pinocchio
       // Traverse the kinematic tree forward from common ancestor to mimicked (primary) joint
       for (size_t k = ancestor_prim + 1; k < model.supports[primary_id].size(); k++)
       {
-        const JointIndex i = model.supports[primary_id].at(k);
+        const JointIndex i = model.supports[primary_id][k];
         iMj = data.liMi[i].actInv(iMj);
 
         forceSet::se3Action(iMj, jmodel.jointVelCols(data.Fcrb[secondary_id]), iF);
