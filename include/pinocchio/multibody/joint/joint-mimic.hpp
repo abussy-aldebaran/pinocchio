@@ -366,8 +366,7 @@ namespace pinocchio
     typedef typename RefJointData::JointDataVariant RefJointDataVariant;
 
     JointDataMimicTpl()
-    : m_scaling((Scalar)0)
-    , S((Scalar)0)
+    : S((Scalar)0)
     {
       joint_q.resize(0, 1);
       joint_q_transformed.resize(0, 1);
@@ -375,24 +374,9 @@ namespace pinocchio
       joint_v_transformed.resize(0, 1);
     }
 
-    // JointDataMimicTpl(const JointDataMimicTpl & other)
-    // { *this = other; }
-
-    // JointDataMimicTpl(const RefJointDataVariant & jdata,
-    //                const Scalar & scaling,
-    //                const int & nq,
-    //                const int & nv)
-    // : m_jdata_ref(jdata)
-    // , m_scaling(scaling)
-    // , S(m_jdata_ref.S(),scaling)
-    // {
-
-    // }
-
     JointDataMimicTpl(
       const RefJointData & jdata, const Scalar & scaling, const int & nq, const int & nv)
     : m_jdata_ref(checkMimic(jdata.derived()))
-    , m_scaling(scaling)
     , S(m_jdata_ref.S(), scaling)
     {
       joint_q.resize(nq, 1);
@@ -404,20 +388,18 @@ namespace pinocchio
     JointDataMimicTpl & operator=(const JointDataMimicTpl & other)
     {
       m_jdata_ref = other.m_jdata_ref;
-      m_scaling = other.m_scaling;
       joint_q = other.joint_q;
       joint_q_transformed = other.joint_q_transformed;
       joint_v = other.joint_v;
       joint_v_transformed = other.joint_v_transformed;
-      S = Constraint_t(m_jdata_ref.S(), other.m_scaling);
+      S = Constraint_t(other.S);
       return *this;
     }
 
     using Base::isEqual;
     bool isEqual(const JointDataMimicTpl & other) const
     {
-      return Base::isEqual(other) && m_jdata_ref == other.m_jdata_ref
-             && m_scaling == other.m_scaling && joint_q == other.joint_q
+      return Base::isEqual(other) && m_jdata_ref == other.m_jdata_ref && joint_q == other.joint_q
              && joint_q_transformed == other.joint_q_transformed && joint_v == other.joint_v
              && joint_v_transformed == other.joint_v_transformed;
     }
@@ -544,15 +526,6 @@ namespace pinocchio
       return m_jdata_ref;
     }
 
-    const Scalar & scaling() const
-    {
-      return m_scaling;
-    }
-    Scalar & scaling()
-    {
-      return m_scaling;
-    }
-
     ConfigVector_t & joint_q_accessor()
     {
       return joint_q;
@@ -591,7 +564,6 @@ namespace pinocchio
 
   protected:
     RefJointData m_jdata_ref;
-    Scalar m_scaling;
 
     /// \brief original configuration vector
     ConfigVector_t joint_q;

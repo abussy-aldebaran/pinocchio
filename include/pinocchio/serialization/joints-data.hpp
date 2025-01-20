@@ -276,7 +276,6 @@ namespace boost
       ar & make_nvp("m_v_transform", joint.v_transformed());
 
       ar & make_nvp("jdata", joint.jdata());
-      ar & make_nvp("scaling", joint.scaling());
     }
 
   } // namespace serialization
