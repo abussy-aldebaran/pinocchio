@@ -37,11 +37,10 @@ namespace pinocchio
         Data & data,
         const Eigen::MatrixBase<ConfigVectorType> & q)
       {
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
-
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
         typedef typename Model::JointIndex JointIndex;
         typedef typename Data::Motion Motion;
 
@@ -98,10 +97,10 @@ namespace pinocchio
         typename Data::VectorXs & g,
         const Eigen::MatrixBase<ReturnMatrixType> & gravity_partial_dq)
       {
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
 
         typedef typename Model::JointIndex JointIndex;
         typedef Eigen::Matrix<
@@ -278,11 +277,10 @@ namespace pinocchio
         const Eigen::MatrixBase<TangentVectorType1> & v,
         const Eigen::MatrixBase<TangentVectorType2> & a)
       {
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
-
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
         typedef typename Model::JointIndex JointIndex;
         typedef typename Data::Motion Motion;
 
@@ -397,10 +395,10 @@ namespace pinocchio
         const Eigen::MatrixBase<MatrixType2> & rnea_partial_dv,
         const Eigen::MatrixBase<MatrixType3> & rnea_partial_da)
       {
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
 
         typedef typename Model::JointIndex JointIndex;
         typedef typename Data::Matrix6x Matrix6x;

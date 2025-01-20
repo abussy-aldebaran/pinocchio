@@ -574,10 +574,10 @@ namespace pinocchio
       static void algo(const JointModelBase<JointModel> & jmodel, const Model & model, Data & data)
       {
 
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
 
         typedef typename Model::JointIndex JointIndex;
         typedef Eigen::Matrix<
@@ -675,10 +675,10 @@ namespace pinocchio
     static void algo(const JointModelBase<JointModel> & jmodel, const Model & model, Data & data)
     {
 
-      assert(
+      PINOCCHIO_THROW(
         (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-         == false)
-        && "Algorithm not supported for mimic joints");
+         == false),
+        std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
 
       typedef typename Model::JointIndex JointIndex;
       typedef Eigen::Matrix<

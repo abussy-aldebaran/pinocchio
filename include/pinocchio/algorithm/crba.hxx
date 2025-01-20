@@ -83,8 +83,9 @@ namespace pinocchio
     {
       const JointIndex secondary_id = jmodel.id();
       const JointIndex primary_id = jmodel.derived().jmodel().id();
-
-      assert(secondary_id > primary_id && "Mimicking joint id is before the primary.");
+      PINOCCHIO_THROW(
+        secondary_id > primary_id, std::invalid_argument,
+        std::string("Mimicking joint id is before the primary in the tree"));
 
       size_t ancestor_prim, ancestor_sec;
       findCommonAncestor(model, primary_id, secondary_id, ancestor_prim, ancestor_sec);
@@ -234,8 +235,9 @@ namespace pinocchio
       const JointIndex secondary_id = jmodel.id();
       const JointIndex primary_id = jmodel.derived().jmodel().id();
 
-      assert(secondary_id > primary_id && "Mimicking joint id is before the primary.");
-
+      PINOCCHIO_THROW(
+        secondary_id > primary_id, std::invalid_argument,
+        std::string("Mimicking joint id is before the primary in the tree"));
       size_t ancestor_prim, ancestor_sec;
       findCommonAncestor(model, primary_id, secondary_id, ancestor_prim, ancestor_sec);
 

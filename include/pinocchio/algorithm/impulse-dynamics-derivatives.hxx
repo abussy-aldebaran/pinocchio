@@ -54,10 +54,10 @@ namespace pinocchio
       const Eigen::MatrixBase<Matrix3xOut1> & v_partial_dq,
       const Eigen::MatrixBase<Matrix3xOut2> & v_partial_dv)
     {
-      assert(
+      PINOCCHIO_THROW(
         (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-         == false)
-        && "Algorithm not supported for mimic joints");
+         == false),
+        std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
 
       typedef typename Model::JointIndex JointIndex;
       typedef typename Data::SE3 SE3;

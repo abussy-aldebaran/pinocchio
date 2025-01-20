@@ -41,11 +41,10 @@ namespace pinocchio
         const Eigen::MatrixBase<ConfigVectorType> & q,
         const Eigen::MatrixBase<TangentVectorType> & v)
       {
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
-
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
         typedef typename Model::JointIndex JointIndex;
         typedef
           typename SizeDepType<JointModel::NV>::template ColsReturn<typename Data::Matrix6x>::Type
@@ -108,10 +107,10 @@ namespace pinocchio
         const Model & model,
         Data & data)
       {
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
 
         typedef typename Model::JointIndex JointIndex;
         typedef

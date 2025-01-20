@@ -51,10 +51,10 @@ namespace pinocchio
         const Eigen::MatrixBase<TangentVectorType1> & v,
         const Eigen::MatrixBase<TangentVectorType2> & a)
       {
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
 
         typedef typename Model::JointIndex JointIndex;
         typedef typename Data::SE3 SE3;

@@ -58,11 +58,10 @@ namespace pinocchio
         typedef typename Model::JointIndex JointIndex;
         typedef typename Data::Motion Motion;
 
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
-
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
         const JointIndex & i = jmodel.id();
         const JointIndex & parent = model.parents[i];
         Motion & ov = data.ov[i];
@@ -375,10 +374,10 @@ namespace pinocchio
           typename SizeDepType<JointModel::NV>::template ColsReturn<typename Data::Matrix6x>::Type
             ColsBlock;
 
-        assert(
+        PINOCCHIO_THROW(
           (std::is_same<JointModel, JointModelMimicTpl<Scalar, Options, JointCollectionTpl>>::value
-           == false)
-          && "Algorithm not supported for mimic joints");
+           == false),
+          std::invalid_argument, std::string("Algorithm not supported for mimic joints"));
 
         const JointIndex & i = jmodel.id();
         const JointIndex & parent = model.parents[i];
