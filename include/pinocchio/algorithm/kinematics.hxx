@@ -292,34 +292,27 @@ namespace pinocchio
     switch (convention)
     {
     case Convention::LOCAL: {
-      SE3Tpl<Scalar, Options> result;
-      const JointIndex child_id = std::max(jointIdRef, jointIdTarget);
-      const JointIndex parent_id = std::min(jointIdRef, jointIdTarget);
-      result.setIdentity();
+      SE3Tpl<Scalar, Options> ancestorMref(1);    // Initialize to Identity
+      SE3Tpl<Scalar, Options> ancestorMtarget(1); // Initialize to Identity
 
-      // Traverse the kinematic chain from "tip" to "root"
-      size_t common_ancestor_parent, common_ancestor_child;
-      findCommonAncestor(model, parent_id, child_id, common_ancestor_parent, common_ancestor_child);
+      size_t ancestor_ref, ancestor_target;
+      findCommonAncestor(model, jointIdRef, jointIdTarget, ancestor_ref, ancestor_target);
 
-      // Traverse the kinematic chain backward to the common ancestor
-      for (size_t i = model.supports[child_id].size() - 1; i > common_ancestor_child; i--)
+      // Traverse the kinematic chain backward from Ref to the common ancestor
+      for (size_t i = model.supports[jointIdRef].size() - 1; i > ancestor_ref; i--)
       {
-        const JointIndex j = model.supports[child_id][(size_t)i];
-        result = data.liMi[j].act(result);
-      }
-      // Then forward to the "parent"
-      for (size_t i = common_ancestor_parent + 1; i <= model.supports[parent_id].size() - 1; i++)
-      {
-        const JointIndex j = model.supports[parent_id][i];
-        result = data.liMi[j].actInv(result);
+        const JointIndex j = model.supports[jointIdRef][(size_t)i];
+        ancestorMref = data.liMi[j].act(ancestorMref);
       }
 
-      // Inverse the result if necessary
-      if (child_id == jointIdRef && jointIdRef != jointIdTarget)
+      // Traverse the kinematic chain backward from Target to the common ancestor
+      for (size_t i = model.supports[jointIdTarget].size() - 1; i > ancestor_target; i--)
       {
-        result = result.inverse();
+        const JointIndex j = model.supports[jointIdTarget][(size_t)i];
+        ancestorMtarget = data.liMi[j].act(ancestorMtarget);
       }
-      return result;
+
+      return ancestorMref.actInv(ancestorMtarget);
     }
     case Convention::WORLD:
       return data.oMi[jointIdRef].actInv(data.oMi[jointIdTarget]);
