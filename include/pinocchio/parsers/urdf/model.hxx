@@ -115,7 +115,7 @@ namespace pinocchio
 
         virtual void addMimicInfo(
           const std::string & mimic_name,
-          const std::string & mimiced_name,
+          const std::string & mimicked_name,
           const Vector3 & axis,
           const Scalar multiplier,
           const Scalar offset,
@@ -147,10 +147,10 @@ namespace pinocchio
         typedef _Scalar Scalar;
         typedef Eigen::Matrix<Scalar, 3, 1> Vector3;
 
-        Vector3 axis;
-        std::string mimiced_name;
+        std::string mimicked_name;
         Scalar multiplier;
         Scalar offset;
+        Vector3 axis;
 
         // Use the JointType from UrdfVisitorBaseTpl
         typedef typename UrdfVisitorBaseTpl<_Scalar, Options>::JointType JointType;
@@ -161,12 +161,12 @@ namespace pinocchio
         }
 
         MimicInfo(
-          std::string _mimiced_name,
+          std::string _mimicked_name,
           Scalar _multiplier,
           Scalar _offset,
           Vector3 _axis,
           JointType _jointType)
-        : mimiced_name(_mimiced_name)
+        : mimicked_name(_mimicked_name)
         , multiplier(_multiplier)
         , offset(_offset)
         , axis(_axis)
@@ -465,13 +465,13 @@ namespace pinocchio
 
         void addMimicInfo(
           const std::string & mimic_name,
-          const std::string & mimiced_name,
+          const std::string & mimicked_name,
           const Vector3 & axis,
           const Scalar multiplier,
           const Scalar offset,
           JointType jointType)
         {
-          MimicInfo<Scalar, Options> mimic_info(mimiced_name, multiplier, offset, axis, jointType);
+          MimicInfo<Scalar, Options> mimic_info(mimicked_name, multiplier, offset, axis, jointType);
           this->mimicInfo_map.insert(std::make_pair(mimic_name, mimic_info));
         }
 
@@ -485,7 +485,7 @@ namespace pinocchio
               typename JointCollection::JointModelRX, typename JointCollection::JointModelRY,
               typename JointCollection::JointModelRZ,
               typename JointCollection::JointModelRevoluteUnaligned>(
-              mimic_name, mimic_info.mimiced_name, mimic_info.axis, mimic_info.multiplier,
+              mimic_name, mimic_info.mimicked_name, mimic_info.axis, mimic_info.multiplier,
               mimic_info.offset);
             break;
           case Base::PRISMATIC:
@@ -493,7 +493,7 @@ namespace pinocchio
               typename JointCollection::JointModelPX, typename JointCollection::JointModelPY,
               typename JointCollection::JointModelPZ,
               typename JointCollection::JointModelPrismaticUnaligned>(
-              mimic_name, mimic_info.mimiced_name, mimic_info.axis, mimic_info.multiplier,
+              mimic_name, mimic_info.mimicked_name, mimic_info.axis, mimic_info.multiplier,
               mimic_info.offset);
             break;
 
@@ -505,35 +505,35 @@ namespace pinocchio
         template<typename TypeX, typename TypeY, typename TypeZ, typename TypeUnaligned>
         void createMimicJoint(
           const std::string & mimic_name,
-          const std::string & mimiced_name,
+          const std::string & mimicked_name,
           const Vector3 & axis,
           const Scalar multiplier,
           const Scalar offset)
         {
-          auto mimiced_joint = model.joints[getJointId(mimiced_name)];
+          auto mimicked_joint = model.joints[getJointId(mimicked_name)];
           auto mimic_joint = model.joints[getJointId(mimic_name)];
 
           CartesianAxis axisType = extractCartesianAxis(axis);
           switch (axisType)
           {
           case AXIS_X:
-            mimic_joint =
-              typename JointCollection::JointModelMimic(TypeX(), mimiced_joint, multiplier, offset);
+            mimic_joint = typename JointCollection::JointModelMimic(
+              TypeX(), mimicked_joint, multiplier, offset);
             break;
 
           case AXIS_Y:
-            mimic_joint =
-              typename JointCollection::JointModelMimic(TypeY(), mimiced_joint, multiplier, offset);
+            mimic_joint = typename JointCollection::JointModelMimic(
+              TypeY(), mimicked_joint, multiplier, offset);
             break;
 
           case AXIS_Z:
-            mimic_joint =
-              typename JointCollection::JointModelMimic(TypeZ(), mimiced_joint, multiplier, offset);
+            mimic_joint = typename JointCollection::JointModelMimic(
+              TypeZ(), mimicked_joint, multiplier, offset);
             break;
 
           case AXIS_UNALIGNED:
             mimic_joint = typename JointCollection::JointModelMimic(
-              TypeUnaligned(), mimiced_joint, multiplier, offset);
+              TypeUnaligned(), mimicked_joint, multiplier, offset);
             break;
 
           default:
