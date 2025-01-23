@@ -511,8 +511,9 @@ namespace pinocchio
           const Scalar offset)
         {
           auto mimicked_joint = model.joints[getJointId(mimicked_name)];
-          auto mimic_joint = model.joints[getJointId(mimic_name)];
-
+          auto &mimic_joint = model.joints[getJointId(mimic_name)];
+          int id = mimic_joint.id();
+          int idx_j = mimic_joint.idx_j();
           CartesianAxis axisType = extractCartesianAxis(axis);
           switch (axisType)
           {
@@ -540,6 +541,7 @@ namespace pinocchio
             PINOCCHIO_CHECK_INPUT_ARGUMENT(false, "The axis type of the joint is of wrong type.");
             break;
           }
+          mimic_joint.setIndexes(id, mimicked_joint.idx_q(), mimicked_joint.idx_v(), idx_j);
         }
 
       private:
